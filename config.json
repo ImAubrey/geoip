@@ -48,6 +48,60 @@
       "type": "text",
       "action": "add",
       "args": {
+        "name": "ct",
+        "uri": "hhttps://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/chinanet.txt",
+        "onlyIPType": "ipv4"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "ct",
+        "uri": "hhttps://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/chinanet6.txt",
+        "onlyIPType": "ipv6"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cm",
+        "uri": "hhttps://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/cmcc.txt",
+        "onlyIPType": "ipv4"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cm",
+        "uri": "hhttps://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/cmcc6.txt",
+        "onlyIPType": "ipv6"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cu",
+        "uri": "hhttps://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/unicom.txt",
+        "onlyIPType": "ipv4"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cu",
+        "uri": "hhttps://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/unicomt6.txt",
+        "onlyIPType": "ipv6"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
         "name": "cloudflare",
         "uri": "https://www.cloudflare.com/ips-v4"
       }
