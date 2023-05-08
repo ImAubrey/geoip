@@ -94,7 +94,7 @@
       "action": "add",
       "args": {
         "name": "cu",
-        "uri": "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/unicomt6.txt",
+        "uri": "https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/unicom6.txt",
         "onlyIPType": "ipv6"
       }
     },
