@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/Loyalsoldier/geoip/lib"
+	"github.com/ImAubrey/geoip/lib"
 )
 
 const (
