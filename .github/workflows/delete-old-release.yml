@@ -3,7 +3,7 @@ name: Delete old releases
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # 每天UTC时间的午夜执行
+    - cron: '0 2 * * 3'  # 每周三UTC时间的凌晨2点执行
 
 jobs:
   delete-old-releases:
