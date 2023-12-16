@@ -1,0 +1,32 @@
+name: Delete old releases
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # 每天UTC时间的午夜执行
+
+jobs:
+  delete-old-releases:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Delete old releases
+        run: |
+          TOKEN="${{ secrets.GH_PAT }}"
+          OWNER="${{ github.repository_owner }}"
+          REPO="${{ github.event.repository.name }}"
+
+          releases=$(curl -s -H "Authorization: token $TOKEN" "https://api.github.com/repos/$OWNER/$REPO/releases")
+
+          today=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          thirty_days_ago=$(date -u -d '30 days ago' +%Y-%m-%dT%H:%M:%SZ)
+
+          for release in $(echo "$releases" | jq -r '.[] | @base64'); do
+              release_date=$(echo "$release" | base64 --decode | jq -r '.published_at')
+              if [[ "$release_date" < "$thirty_days_ago" ]]; then
+                  release_id=$(echo "$release" | base64 --decode | jq -r '.id')
+                  curl -X DELETE -H "Authorization: token $TOKEN" "https://api.github.com/repos/$OWNER/$REPO/releases/$release_id"
+                  echo "Deleted release $release_id"
+              fi
+          done
