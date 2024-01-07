@@ -143,6 +143,13 @@
       }
     },
     {
+      "type": "maxmindMMDB",
+      "action": "output",
+      "args": {
+        "outputName": "geoip.mmdb"
+      }
+    },
+    {
       "type": "v2rayGeoIPDat",
       "action": "output",
       "args": {
