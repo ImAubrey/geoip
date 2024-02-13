@@ -18,12 +18,11 @@
       }
     },
     {
-      "type": "text",
+      "type": "maxmindMMDB",
       "action": "add",
       "args": {
         "name": "cn",
-        "uri": "https://raw.githubusercontent.com/misakaio/chnroutes2/master/chnroutes.txt",
-        "onlyIPType": "ipv4"
+        "uri": "https://raw.githubusercontent.com/misakaio/chnroutes2/master/chnroutes.mmdb"
       }
     },
     {
