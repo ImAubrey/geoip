@@ -100,6 +100,14 @@
       "type": "text",
       "action": "add",
       "args": {
+        "name": "global-doh",
+        "uri": "https://raw.githubusercontent.com/jameshas/Public-DoH-Lists/main/lists/doh_ips_plain.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
         "name": "cloudflare",
         "uri": "https://www.cloudflare.com/ips-v6"
       }
