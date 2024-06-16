@@ -21,3 +21,4 @@ while IFS= read -r line; do
     jq --raw-output '.data.prefixes.v6.originating[]' ./tmp/${filename}-${asn}.txt | sort -u >>${file}
   done
 done <${input}
+
