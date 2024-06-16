@@ -2,7 +2,7 @@ name: Build geoip files
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 2 * * *"
+    - cron: "0 0 * * 4"
   push:
     branches:
       - master
@@ -18,12 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout codebase
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version-file: ./go.mod
 
@@ -42,18 +42,16 @@ jobs:
         run: |
           curl -sSL https://www.gstatic.com/ipranges/goog.json | jq --raw-output '.prefixes[].ipv4Prefix,.prefixes[].ipv6Prefix | select(. != null)' >> data/google
           curl -sSL https://www.gstatic.com/ipranges/cloud.json | jq --raw-output '.prefixes[].ipv4Prefix,.prefixes[].ipv6Prefix | select(. != null)' >> data/google
-          curl -sSL https://api.fastly.com/public-ip-list | jq --raw-output '.addresses[],.ipv6_addresses[]' >> data/fastly
           curl -sSL https://ip-ranges.amazonaws.com/ip-ranges.json | jq --raw-output '.prefixes[],.ipv6_prefixes[] | select(.service == "CLOUDFRONT") | .ip_prefix,.ipv6_prefix' | grep "/" >> data/cloudfront
+          curl -sSL http://ftp.apnic.net/stats/apnic/delegated-apnic-latest > ip.txt
+          if [ "`cat ip.txt`" = "" ]; then curl -sSL https://raw.githubusercontent.com/xishang0128/geoip/release/ip.txt > ip.txt; fi   
+          cat ip.txt | awk -F '|' '/CN/&&/ipv4/ {print $4 "/" 32-log($5)/log(2)}' > data/cn
+          cat ip.txt | awk -F '|' '/CN/&&/ipv6/ {print $4 "/" $5}' >> data/cn
+          curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/BiliBili/BiliBili_Resolve.list | grep IP-CIDR, | sed 's/IP-CIDR,//g' > data/bilibili
+          curl -sSL https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Loon/Apple/Apple_Resolve.list | grep IP-CIDR, | sed 's/IP-CIDR,//g' > data/apple
+          cat ip.txt | awk -F '|' '/JP/&&/ipv4/ {print $4 "/" 32-log($5)/log(2)}' > data/jp
+          cat ip.txt | awk -F '|' '/JP/&&/ipv6/ {print $4 "/" $5}' >> data/jp
 
-      - name: Get GeoLite2
-        env:
-          LICENSE_KEY: ${{ secrets.MAXMIND_GEOLITE2_LICENSE }}
-        run: |
-          curl -L "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${LICENSE_KEY}&suffix=zip" -o GeoLite2-Country-CSV.zip
-          unzip GeoLite2-Country-CSV.zip
-          rm -f GeoLite2-Country-CSV.zip
-          mv GeoLite2* geolite2
-          
       - name: Build geoip files
         run: |
           go run ./
@@ -80,15 +78,6 @@ jobs:
             sha256sum ${name} > ./${name}.sha256sum
           done
 
-      - name: Download GeoLite2
-        env:
-          LICENSE_KEY: ${{ secrets.MAXMIND_GEOLITE2_LICENSE }}
-        run: |
-          curl -L "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN&license_key=${LICENSE_KEY}&suffix=tar.gz" -o GeoLite2-ASN.tar.gz
-          curl -L "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-ASN-CSV&license_key=${LICENSE_KEY}&suffix=zip" -o GeoLite2-ASN-CSV.zip
-          curl -L "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=tar.gz" -o GeoLite2-Country.tar.gz
-          curl -L "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country-CSV&license_key=${LICENSE_KEY}&suffix=zip" -o GeoLite2-Country-CSV.zip
-
       - name: Move files to publish directory
         run: |
           mkdir -p publish
@@ -108,7 +97,7 @@ jobs:
           git checkout -b release
           git add -A
           git commit -m "${{ env.RELEASE_NAME }}"
-          git remote add geoip "https://${{ github.actor }}:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}"
+          git remote add geoip "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
           git push -f -u geoip release
 
       - name: Purge jsdelivr CDN
@@ -122,9 +111,13 @@ jobs:
         run: rm -rf ./publish/*.{gz,zip} ./publish/text
 
       - name: Upload files to GitHub release
-        uses: svenstaro/upload-release-action@v2
+        uses: softprops/action-gh-release@v1
         with:
-          repo_token: ${{ secrets.GH_PAT }}
-          file_glob: true
-          file: ./publish/*
-          tag: ${{ env.TAG_NAME }}
+          name: latest
+          tag_name: latest
+          draft: false
+          prerelease: false
+          files: |
+            ./publish/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
