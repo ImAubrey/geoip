@@ -21,6 +21,14 @@
       "type": "text",
       "action": "add",
       "args": {
+        "name": "common-dns",
+        "uri": "https://raw.githubusercontent.com/ImAubrey/geoip/refs/heads/master/custom/common-dns.txt",
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
         "name": "cn",
         "uri": "https://ruleset.skk.moe/Clash/ip/china_ip.txt",
         "onlyIPType": "ipv4"
