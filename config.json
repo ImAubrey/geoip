@@ -175,6 +175,9 @@
         "ipv4": "./geolite2/GeoLite2-ASN-Blocks-IPv4.csv",
         "ipv6": "./geolite2/GeoLite2-ASN-Blocks-IPv6.csv",
         "wantedList": {
+          "local-jp": [
+            "APNIC:JP"
+          ],
           "cloudflare": [
             "AS395747",
             "AS394536",
