@@ -1,12 +1,16 @@
 package maxmind
 
 import (
+	"bufio"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
+	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/Loyalsoldier/geoip/lib"
@@ -31,6 +35,121 @@ func init() {
 	})
 }
 
+func mapRIRToURL(rir string) string {
+	switch strings.ToLower(rir) {
+	case "apnic":
+		return "http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
+	case "ripe":
+		return "http://ftp.ripe.net/ripe/stats/delegated-ripencc-latest"
+	case "arin":
+		return "http://ftp.arin.net/pub/stats/arin/delegated-arin-extended-latest"
+	case "lacnic":
+		return "http://ftp.lacnic.net/lacnic/stats/lacnic/delegated-lacnic-latest"
+	case "afrinic":
+		return "https://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest"
+	default:
+		return ""
+	}
+}
+func fetchASNFromRIR(rir, country string) ([]string, error) {
+	url := mapRIRToURL(rir)
+	if url == "" {
+		return nil, fmt.Errorf("unsupported RIR: %s", rir)
+	}
+
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, fmt.Errorf("http get failed: %v", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("bad status: %s", resp.Status)
+	}
+
+	asnList := []string{}
+	scanner := bufio.NewScanner(resp.Body)
+	// RIR: 小写，country: 大写
+	rirLower := strings.ToLower(rir)
+	countryUpper := strings.ToUpper(country)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		// 格式: rir|CC|type|start|count|...
+		// 例如: apnic|JP|asn|1234|10|...
+		parts := strings.Split(line, "|")
+		if len(parts) < 5 {
+			continue
+		}
+		if strings.ToLower(parts[0]) != rirLower {
+			continue
+		}
+		if strings.ToUpper(parts[1]) != countryUpper || parts[2] != "asn" {
+			continue
+		}
+		startNum, err1 := strconv.Atoi(parts[3])
+		count, err2 := strconv.Atoi(parts[4])
+		if err1 != nil || err2 != nil {
+			continue
+		}
+		for i := 0; i < count; i++ {
+			asnList = append(asnList, fmt.Sprintf("AS%d", startNum+i))
+		}
+	}
+	if err := scanner.Err(); err != nil && err != io.EOF {
+		return nil, fmt.Errorf("scanner error: %v", err)
+	}
+	return asnList, nil
+}
+func isRIRCountryPattern(raw string) bool {
+	parts := strings.Split(raw, ":")
+	if len(parts) != 2 {
+		return false
+	}
+	// parts[0] 是否在支持的 RIR 列表里
+	switch strings.ToLower(parts[0]) {
+	case "apnic", "ripe", "arin", "lacnic", "afrinic":
+		return true
+	default:
+		return false
+	}
+}
+func isURL(s string) bool {
+	return strings.HasPrefix(s, "http://") || strings.HasPrefix(s, "https://")
+}
+
+// fetchASNs grabs the body at url, then tries JSON unmarshal; if that fails, falls back to splitting lines.
+func fetchASNs(url string) ([]string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	// trim BOM/spaces to peek
+	data := strings.TrimSpace(string(body))
+	var asnList []string
+	if strings.HasPrefix(data, "[") {
+		// try JSON array of strings
+		if err := json.Unmarshal([]byte(data), &asnList); err == nil {
+			return asnList, nil
+		}
+		// if JSON fails, fallback to lines
+	}
+	// plain-text: split by newlines, ignore empty
+	lines := strings.Split(data, "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if line != "" {
+			asnList = append(asnList, line)
+		}
+	}
+	return asnList, nil
+}
 func newGeoLite2ASNCSV(action lib.Action, data json.RawMessage) (lib.InputConverter, error) {
 	var tmp struct {
 		IPv4File   string              `json:"ipv4"`
@@ -60,17 +179,50 @@ func newGeoLite2ASNCSV(action lib.Action, data json.RawMessage) (lib.InputConver
 			continue
 		}
 
-		for _, asn := range asnList {
-			asn = strings.TrimPrefix(strings.ToLower(strings.TrimSpace(asn)), "as")
-			if asn == "" {
+		for _, raw := range asnList {
+			raw = strings.TrimSpace(raw)
+			if raw == "" {
 				continue
 			}
 
-			if listArr, found := wantList[asn]; found {
-				listArr = append(listArr, list)
-				wantList[asn] = listArr
+			var sources []string
+			if isURL(raw) {
+				// fetch remote content
+				fetched, err := fetchASNs(raw)
+				if err != nil {
+					// if fetch fails, skip or log; here we skip silently
+					continue
+				}
+				sources = fetched
+			} else if isRIRCountryPattern(raw) {
+				parts := strings.SplitN(raw, ":", 2)
+				rir := parts[0]
+				country := parts[1]
+				fetched, err := fetchASNFromRIR(rir, country)
+				if err != nil {
+					// 拉不到就跳过
+					continue
+				}
+				sources = fetched
+
+				// 3. 其余当单个 ASN 处理
 			} else {
-				wantList[asn] = []string{list}
+				sources = []string{raw}
+			}
+
+			for _, asnEntry := range sources {
+				// normalize "AS123" → "123"
+				entry := strings.ToLower(strings.TrimSpace(asnEntry))
+				entry = strings.TrimPrefix(entry, "as")
+				if entry == "" {
+					continue
+				}
+				// stash into wantList map
+				if arr, ok := wantList[entry]; ok {
+					wantList[entry] = append(arr, list)
+				} else {
+					wantList[entry] = []string{list}
+				}
 			}
 		}
 	}
