@@ -77,3 +77,7 @@ geoip
 *.mmdb
 *.srs
 *.mrs
+
+# Python cache files
+__pycache__/
+*.pyc

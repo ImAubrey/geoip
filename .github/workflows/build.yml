@@ -58,6 +58,10 @@ jobs:
           cp GeoLite2-Country-CSV_*/*.csv ./geolite2/
           cp GeoLite2-ASN-CSV_*/*.csv ./geolite2/
 
+      - name: Refresh dnscry.pt resolvers in common-dns
+        run: |
+          python3 ./scripts/update_dnscry_common_dns.py
+
       - name: Build geoip files
         run: |
           go build ./
