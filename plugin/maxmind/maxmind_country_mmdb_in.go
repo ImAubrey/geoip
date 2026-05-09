@@ -128,13 +128,19 @@ func (m *MMDBIn) generateEntries(content []byte, entries map[string]*lib.Entry) 
 
 		case TypeIPInfoCountryMMDBIn:
 			record := struct {
-				Country string `maxminddb:"country"`
+				Country     string `maxminddb:"country"`
+				CountryCode string `maxminddb:"country_code"`
 			}{}
 			subnet, err = networks.Network(&record)
 			if err != nil {
 				return err
 			}
-			name = strings.ToUpper(strings.TrimSpace(record.Country))
+			switch {
+			case strings.TrimSpace(record.CountryCode) != "":
+				name = strings.ToUpper(strings.TrimSpace(record.CountryCode))
+			default:
+				name = strings.ToUpper(strings.TrimSpace(record.Country))
+			}
 
 		default:
 			return lib.ErrNotSupportedFormat

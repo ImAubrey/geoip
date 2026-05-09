@@ -1,17 +1,17 @@
 # 简介
 
-本项目每周四自动生成多种格式 GeoIP 文件，同时提供命令行界面（CLI）工具供用户自行定制 GeoIP 文件，包括但不限于 V2Ray `dat` 格式文件 `geoip.dat`、MaxMind `mmdb` 格式文件 `Country.mmdb`、sing-box `SRS` 格式文件、mihomo `MRS` 格式文件、Clash ruleset 和 Surge ruleset。
+本项目每周四自动生成多种格式 GeoIP 文件，同时提供命令行界面（CLI）工具供用户自行定制 GeoIP 文件，包括但不限于 V2Ray `dat` 格式文件 `geoip.dat`、MaxMind-compatible `mmdb` 格式文件 `Country.mmdb`、sing-box `SRS` 格式文件、mihomo `MRS` 格式文件、Clash ruleset 和 Surge ruleset。
 
-This project releases various formats of GeoIP files automatically every Thursday, and provides a command line interface(CLI) tool for users to customize their own GeoIP files, including but not limited to V2Ray `dat` format file `geoip.dat`, MaxMind `mmdb` format file `Country.mmdb`, sing-box `SRS` format files, mihomo `MRS` format files, Clash ruleset files and Surge ruleset files.
+This project releases various formats of GeoIP files automatically every Thursday, and provides a command line interface(CLI) tool for users to customize their own GeoIP files, including but not limited to V2Ray `dat` format file `geoip.dat`, MaxMind-compatible `mmdb` format file `Country.mmdb`, sing-box `SRS` format files, mihomo `MRS` format files, Clash ruleset files and Surge ruleset files.
 
-## 与 MaxMind 官方 GeoIP 数据的区别
+## 与 IPinfo 官方 GeoIP 数据的区别
 
-本项目默认使用 [MaxMind GeoLite2 Country CSV 数据](https://github.com/Loyalsoldier/geoip/blob/release/GeoLite2-Country-CSV.zip)生成各个国家和地区的 GeoIP 文件。所有可供使用的国家和地区 geoip 类别（如 `geoip:cn`，两位英文字母表示国家和地区），请查看：[https://www.iban.com/country-codes](https://www.iban.com/country-codes)。
+本项目默认使用 [IPinfo Lite MMDB 数据](https://ipinfo.io/developers/ipinfo-lite-database)生成各个国家和地区的 GeoIP 文件，并使用同一数据库中的 ASN 字段生成新增 ASN 类别。所有可供使用的国家和地区 geoip 类别（如 `geoip:cn`，两位英文字母表示国家和地区），请查看：[https://www.iban.com/country-codes](https://www.iban.com/country-codes)。
 
-另外，本项目对 MaxMind 官方 GeoIP 数据做了修改和新增：
+另外，本项目对 IPinfo 官方 GeoIP 数据做了修改和新增：
 
 - 中国大陆 IPv4 地址数据融合了 [IPIP.net](https://github.com/17mon/china_ip_list/blob/master/china_ip_list.txt) 和 [@gaoyifan/china-operator-ip](https://github.com/gaoyifan/china-operator-ip/blob/ip-lists/china.txt)
-- 中国大陆 IPv6 地址数据融合了 MaxMind GeoLite2 和 [@gaoyifan/china-operator-ip](https://github.com/gaoyifan/china-operator-ip/blob/ip-lists/china6.txt)
+- 中国大陆 IPv6 地址数据融合了 IPinfo 和 [@gaoyifan/china-operator-ip](https://github.com/gaoyifan/china-operator-ip/blob/ip-lists/china6.txt)
 - 新增类别（方便有特殊需求的用户使用）：
   - `geoip:cloudflare`（`GEOIP,CLOUDFLARE`）
   - `geoip:cloudfront`（`GEOIP,CLOUDFRONT`）
@@ -150,31 +150,18 @@ proxy(geoip:us)
 
 ---
 
-### MaxMind mmdb 格式文件
+### MMDB 格式文件
 
-MaxMind 官方版**国家/地区**类型 mmdb 文件：
+IPinfo Lite 官方 MMDB 数据源：
 
-> 适用于 [Clash](https://github.com/Dreamacro/clash)、[mihomo](https://github.com/MetaCubeX/mihomo/tree/Meta)、[Shadowrocket](https://apps.apple.com/us/app/id932747118)、[Quantumult X](https://apps.apple.com/us/app/id1443988620)、[Surge](https://nssurge.com)、[Leaf](https://github.com/eycorsican/leaf)。
+> 主要作为本项目构建数据源发布。下游客户端通常建议使用下方本项目生成的 `Country*.mmdb` 文件。
 
-> 适用于 [Nginx](https://nginx.org)，需要配合 [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module) 模块使用。
-
-- **GeoLite2-Country.mmdb**：
-  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb)
-  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-Country.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-Country.mmdb)
-- **GeoLite2-Country.mmdb.sha256sum**：
-  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb.sha256sum)
-  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-Country.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-Country.mmdb.sha256sum)
-
-MaxMind 官方版 **ASN** 类型 mmdb 文件：
-
-> 适用于 [mihomo](https://github.com/MetaCubeX/mihomo/tree/Meta)、[Shadowrocket](https://apps.apple.com/us/app/id932747118)、[Surge](https://nssurge.com)。
-
-- **GeoLite2-ASN.mmdb**：
-  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb)
-  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-ASN.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-ASN.mmdb)
-- **GeoLite2-ASN.mmdb.sha256sum**：
-  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb.sha256sum)
-  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-ASN.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-ASN.mmdb.sha256sum)
+- **IPinfo-Lite.mmdb**：
+  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/IPinfo-Lite.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/IPinfo-Lite.mmdb)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/IPinfo-Lite.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/IPinfo-Lite.mmdb)
+- **IPinfo-Lite.mmdb.sha256sum**：
+  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/IPinfo-Lite.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/IPinfo-Lite.mmdb.sha256sum)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/IPinfo-Lite.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/IPinfo-Lite.mmdb.sha256sum)
 
 本项目生成的**国家/地区**类型 mmdb 文件：
 
@@ -182,7 +169,7 @@ MaxMind 官方版 **ASN** 类型 mmdb 文件：
 
 > 适用于 [Nginx](https://nginx.org)，需要配合 [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module) 模块使用。
 
-> **国家/地区**类别保留了 `Continent` 和 `Country` 里的所有字段。**新增类别**和 **geoip:private** 类别只保留了 `Country` 里的 `iso_code`（两位英文字母表示的国家/地区代号）字段。关于 Maxmind 官方 country MMDB 格式文件完整字段，请[查看代码](https://github.com/oschwald/geoip2-golang/blob/576a46d19bb59f32d0215cb43285b8928891b6bc/reader.go#L139-L171)。
+> 本项目生成的 MaxMind-compatible MMDB 文件默认写入 `country.iso_code`（两位英文字母表示的国家/地区代号）字段，数据来源为 IPinfo。
 
 - **Country-without-asn.mmdb**（传统版 GeoIP，只包含国家/地区类别，不包含上述新增类别。建议优先使用）：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb)
@@ -190,7 +177,7 @@ MaxMind 官方版 **ASN** 类型 mmdb 文件：
 - **Country-without-asn.mmdb.sha256sum**：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb.sha256sum)
   - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb.sha256sum)
-- **Country.mmdb**（增强版 GeoIP，包含国家/地区类别，以及上述新增类别。但由于 MaxMind mmdb 格式限制，部分国家/地区类别的 IP 地址数据不如上述 **Country-without-asn.mmdb** 准确）：
+- **Country.mmdb**（增强版 GeoIP，包含国家/地区类别，以及上述新增类别。但由于 MMDB 覆盖写入限制，部分国家/地区类别的 IP 地址数据不如上述 **Country-without-asn.mmdb** 准确）：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb)
   - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb)
 - **Country.mmdb.sha256sum**：
@@ -231,7 +218,6 @@ rules:
 geodata-mode: true
 geox-url:
   mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
-  asn: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/GeoLite2-ASN.mmdb"
 ```
 </details>
 
@@ -440,8 +426,8 @@ RULE-SET,https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/surge/telegram.t
 
 **特别说明：**
 
-- **在线生成**：[Fork](https://github.com/Loyalsoldier/geoip/fork) 本项目后，如果需要使用 MaxMind GeoLite2 官方数据文件，需要在自己仓库的 **[Settings]** 页面的左侧边栏 **[Secrets and variables]** 下的 **[Actions]** 选项卡页面中添加一个名为 **MAXMIND_GEOLITE2_LICENSE** 的 secret，否则 GitHub Actions 会运行失败。这个 secret 的值为 MaxMind 账号的 LICENSE KEY，需要[**注册 MaxMind 账号**](https://www.maxmind.com/en/geolite2/signup)后，在[**个人账号管理页面**](https://www.maxmind.com/en/account)左侧边栏的 [**Manage License Keys**] 里生成。
-- **本地生成**：如果需要使用 MaxMind 官方 GeoLite2 数据文件，需要提前从 MaxMind 下载，或者从本项目 [release 分支](https://github.com/Loyalsoldier/geoip/tree/release)下载（文件名以 `GeoLite2` 为前缀的文件），并解压缩到名为 `geolite2` 的目录。
+- **在线生成**：[Fork](https://github.com/Loyalsoldier/geoip/fork) 本项目后，需要在自己仓库的 **[Settings]** 页面的左侧边栏 **[Secrets and variables]** 下的 **[Actions]** 选项卡页面中添加一个名为 **IPINFO_TOKEN** 的 secret，否则 GitHub Actions 会运行失败。这个 secret 的值为 IPinfo 账号的 access token。
+- **本地生成**：需要提前从 IPinfo 下载 `ipinfo_lite.mmdb`，并放到名为 `ipinfo` 的目录。
 
 ### 概念解析
 
@@ -465,7 +451,8 @@ These two concepts are notable: `input` and `output`. The `input` is the data so
 - **maxmindGeoLite2ASNCSV**：MaxMind GeoLite2 ASN CSV 数据格式（`GeoLite2-ASN-CSV.zip`）
 - **maxmindGeoLite2CountryCSV**：MaxMind GeoLite2 country CSV 数据格式（`GeoLite2-Country-CSV.zip`）
 - **dbipCountryMMDB**：DB-IP country mmdb 数据格式（`dbip-country-lite.mmdb`）
-- **ipinfoCountryMMDB**：IPInfo country mmdb 数据格式（`country.mmdb`）
+- **ipinfoCountryMMDB**：IPInfo Lite / country mmdb 数据格式（`ipinfo_lite.mmdb`）
+- **ipinfoASNMMDB**：IPInfo Lite ASN mmdb 数据格式（`ipinfo_lite.mmdb`）
 - **mihomoMRS**：mihomo MRS 数据格式（`geoip-cn.mrs`）
 - **singboxSRS**：sing-box SRS 数据格式（`geoip-cn.srs`）
 - **clashRuleSetClassical**：[classical 类型的 Clash RuleSet](https://github.com/Dreamacro/clash/wiki/premium-core-features#classical)
@@ -480,7 +467,7 @@ These two concepts are notable: `input` and `output`. The `input` is the data so
 - **v2rayGeoIPDat**：V2Ray GeoIP dat 数据格式（`geoip.dat`）
 - **maxmindMMDB**：MaxMind GeoLite2 country mmdb 数据格式（`GeoLite2-Country.mmdb`）
 - **dbipCountryMMDB**：DB-IP country mmdb 数据格式（`dbip-country-lite.mmdb`）
-- **ipinfoCountryMMDB**：IPInfo country mmdb 数据格式（`country.mmdb`）
+- **ipinfoCountryMMDB**：IPInfo Lite / country mmdb 数据格式（`ipinfo_lite.mmdb`）
 - **mihomoMRS**：mihomo MRS 数据格式（`geoip-cn.mrs`）
 - **singboxSRS**：sing-box SRS 数据格式（`geoip-cn.srs`）
 - **clashRuleSetClassical**：[classical 类型的 Clash RuleSet](https://github.com/Dreamacro/clash/wiki/premium-core-features#classical)
@@ -535,6 +522,7 @@ All available input formats:
   - clashRuleSetClassical (Convert classical type of Clash RuleSet to other formats (just processing IP & CIDR lines))
   - cutter (Remove data from previous steps)
   - dbipCountryMMDB (Convert DB-IP country mmdb database to other formats)
+  - ipinfoASNMMDB (Convert IPInfo ASN mmdb database to other formats)
   - ipinfoCountryMMDB (Convert IPInfo country mmdb database to other formats)
   - json (Convert JSON data to other formats)
   - maxmindGeoLite2ASNCSV (Convert MaxMind GeoLite2 ASN CSV data to other formats)
@@ -805,7 +793,7 @@ false
 
 [CC-BY-SA-4.0](https://creativecommons.org/licenses/by-sa/4.0/) and [GPL-3.0](https://github.com/Loyalsoldier/geoip/blob/master/LICENSE-GPL)
 
-This product includes GeoLite2 data created by MaxMind, available from [MaxMind](https://www.maxmind.com).
+IP address data powered by [IPinfo](https://ipinfo.io).
 
 ## 项目 Star 数增长趋势
 
