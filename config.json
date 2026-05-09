@@ -286,11 +286,33 @@
       }
     },
     {
-      "type": "maxmindMMDB",
+      "type": "ipinfoCountryMMDB",
       "action": "output",
       "args": {
         "outputDir": "./output",
         "outputName": "Country.mmdb",
+        "sourceMMDBURI": "./ipinfo/ipinfo_lite.mmdb",
+        "overwriteList": [
+          "cn",
+          "cloudflare",
+          "cloudfront",
+          "facebook",
+          "fastly",
+          "google",
+          "netflix",
+          "telegram",
+          "twitter",
+          "tor",
+          "private"
+        ]
+      }
+    },
+    {
+      "type": "maxmindMMDB",
+      "action": "output",
+      "args": {
+        "outputDir": "./output",
+        "outputName": "Country-maxmind.mmdb",
         "overwriteList": [
           "cn",
           "cloudflare",

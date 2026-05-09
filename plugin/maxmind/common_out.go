@@ -19,6 +19,55 @@ var (
 	defaultIPInfoOutputDir  = filepath.Join("./", "output", "ipinfo")
 )
 
+type ipInfoCountryRecord struct {
+	Continent     string `maxminddb:"continent"`
+	ContinentCode string `maxminddb:"continent_code"`
+	ContinentName string `maxminddb:"continent_name"`
+	Country       string `maxminddb:"country"`
+	CountryCode   string `maxminddb:"country_code"`
+	CountryName   string `maxminddb:"country_name"`
+}
+
+func (i ipInfoCountryRecord) countryCode() string {
+	switch {
+	case strings.TrimSpace(i.CountryCode) != "":
+		return strings.ToUpper(strings.TrimSpace(i.CountryCode))
+	default:
+		return strings.ToUpper(strings.TrimSpace(i.Country))
+	}
+}
+
+func (i ipInfoCountryRecord) countryName() string {
+	switch {
+	case strings.TrimSpace(i.CountryName) != "":
+		return strings.TrimSpace(i.CountryName)
+	case strings.TrimSpace(i.CountryCode) != "":
+		return strings.TrimSpace(i.Country)
+	default:
+		return ""
+	}
+}
+
+func (i ipInfoCountryRecord) continentCode() string {
+	switch {
+	case strings.TrimSpace(i.ContinentCode) != "":
+		return strings.TrimSpace(i.ContinentCode)
+	default:
+		return strings.TrimSpace(i.Continent)
+	}
+}
+
+func (i ipInfoCountryRecord) continentName() string {
+	switch {
+	case strings.TrimSpace(i.ContinentName) != "":
+		return strings.TrimSpace(i.ContinentName)
+	case strings.TrimSpace(i.ContinentCode) != "":
+		return strings.TrimSpace(i.Continent)
+	default:
+		return ""
+	}
+}
+
 func newMMDBOut(iType string, iDesc string, action lib.Action, data json.RawMessage) (lib.OutputConverter, error) {
 	var tmp struct {
 		OutputName string     `json:"outputName"`
@@ -143,18 +192,16 @@ func (m *MMDBOut) GetExtraInfo() (map[string]interface{}, error) {
 			}
 
 		case TypeIPInfoCountryMMDBOut:
-			record := struct {
-				Continent     string `maxminddb:"continent"`
-				ContinentName string `maxminddb:"continent_name"`
-				Country       string `maxminddb:"country"`
-				CountryName   string `maxminddb:"country_name"`
-			}{}
+			record := ipInfoCountryRecord{}
 
 			_, err := networks.Network(&record)
 			if err != nil {
 				return nil, err
 			}
-			countryCode := strings.ToUpper(strings.TrimSpace(record.Country))
+			countryCode := record.countryCode()
+			if countryCode == "" {
+				continue
+			}
 			if _, found := infoList[countryCode]; !found {
 				infoList[countryCode] = record
 			}

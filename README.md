@@ -1,8 +1,8 @@
 # 简介
 
-本项目每周四自动生成多种格式 GeoIP 文件，同时提供命令行界面（CLI）工具供用户自行定制 GeoIP 文件，包括但不限于 V2Ray `dat` 格式文件 `geoip.dat`、MaxMind-compatible `mmdb` 格式文件 `Country.mmdb`、sing-box `SRS` 格式文件、mihomo `MRS` 格式文件、Clash ruleset 和 Surge ruleset。
+本项目每周四自动生成多种格式 GeoIP 文件，同时提供命令行界面（CLI）工具供用户自行定制 GeoIP 文件，包括但不限于 V2Ray `dat` 格式文件 `geoip.dat`、IPinfo `mmdb` 格式文件 `Country.mmdb`、MaxMind-compatible `mmdb` 格式文件 `Country-maxmind.mmdb`、sing-box `SRS` 格式文件、mihomo `MRS` 格式文件、Clash ruleset 和 Surge ruleset。
 
-This project releases various formats of GeoIP files automatically every Thursday, and provides a command line interface(CLI) tool for users to customize their own GeoIP files, including but not limited to V2Ray `dat` format file `geoip.dat`, MaxMind-compatible `mmdb` format file `Country.mmdb`, sing-box `SRS` format files, mihomo `MRS` format files, Clash ruleset files and Surge ruleset files.
+This project releases various formats of GeoIP files automatically every Thursday, and provides a command line interface(CLI) tool for users to customize their own GeoIP files, including but not limited to V2Ray `dat` format file `geoip.dat`, IPinfo `mmdb` format file `Country.mmdb`, MaxMind-compatible `mmdb` format file `Country-maxmind.mmdb`, sing-box `SRS` format files, mihomo `MRS` format files, Clash ruleset files and Surge ruleset files.
 
 ## 与 IPinfo 官方 GeoIP 数据的区别
 
@@ -165,24 +165,26 @@ IPinfo Lite 官方 MMDB 数据源：
 
 本项目生成的**国家/地区**类型 mmdb 文件：
 
-> 适用于 [Clash](https://github.com/Dreamacro/clash)、[mihomo](https://github.com/MetaCubeX/mihomo/tree/Meta)、[Shadowrocket](https://apps.apple.com/us/app/id932747118)、[Quantumult X](https://apps.apple.com/us/app/id1443988620)、[Surge](https://nssurge.com)、[Leaf](https://github.com/eycorsican/leaf)。
+> `Country.mmdb` 默认使用 IPinfo 字段格式。需要 MaxMind-compatible 字段格式的客户端，请使用 `Country-maxmind.mmdb`。
 
-> 适用于 [Nginx](https://nginx.org)，需要配合 [ngx_http_geoip2_module](https://github.com/leev/ngx_http_geoip2_module) 模块使用。
-
-> 本项目生成的 MaxMind-compatible MMDB 文件默认写入 `country.iso_code`（两位英文字母表示的国家/地区代号）字段，数据来源为 IPinfo。
-
-- **Country-without-asn.mmdb**（传统版 GeoIP，只包含国家/地区类别，不包含上述新增类别。建议优先使用）：
-  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb)
-  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb)
-- **Country-without-asn.mmdb.sha256sum**：
-  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb.sha256sum)
-  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb.sha256sum)
-- **Country.mmdb**（增强版 GeoIP，包含国家/地区类别，以及上述新增类别。但由于 MMDB 覆盖写入限制，部分国家/地区类别的 IP 地址数据不如上述 **Country-without-asn.mmdb** 准确）：
+- **Country.mmdb**（IPinfo 格式增强版 GeoIP，包含国家/地区类别，以及上述新增类别）：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb)
   - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb)
 - **Country.mmdb.sha256sum**：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb.sha256sum)
   - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb.sha256sum)
+- **Country-maxmind.mmdb**（MaxMind-compatible 格式增强版 GeoIP，包含国家/地区类别，以及上述新增类别）：
+  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-maxmind.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-maxmind.mmdb)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-maxmind.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-maxmind.mmdb)
+- **Country-maxmind.mmdb.sha256sum**：
+  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-maxmind.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-maxmind.mmdb.sha256sum)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-maxmind.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-maxmind.mmdb.sha256sum)
+- **Country-without-asn.mmdb**（MaxMind-compatible 传统版 GeoIP，只包含国家/地区类别，不包含上述新增类别）：
+  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb)
+- **Country-without-asn.mmdb.sha256sum**：
+  - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb.sha256sum](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-without-asn.mmdb.sha256sum)
+  - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb.sha256sum](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-without-asn.mmdb.sha256sum)
 - **Country-only-cn-private.mmdb**（精简版 GeoIP，只包含 `GEOIP,CN` 和 `GEOIP,PRIVATE`）：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-only-cn-private.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-only-cn-private.mmdb)
   - [https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb](https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-only-cn-private.mmdb)
@@ -201,7 +203,7 @@ IPinfo Lite 官方 MMDB 数据源：
 <details>
   <summary>点击查看在 <b>Clash</b> 中的使用方法</summary>
   <br/>
-  <p>需要先下载 <code>.mmdb</code> 格式文件，命名为 <code>Country.mmdb</code>，并放置在 Clash 程序目录内。</p>
+  <p>需要先下载 <code>Country-maxmind.mmdb</code>，命名为 <code>Country.mmdb</code>，并放置在 Clash 程序目录内。</p>
 
 ```yaml
 rules:
@@ -217,7 +219,7 @@ rules:
 ```yaml
 geodata-mode: true
 geox-url:
-  mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country.mmdb"
+  mmdb: "https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/Country-maxmind.mmdb"
 ```
 </details>
 
@@ -574,7 +576,8 @@ $ ./geoip convert -c config.json
 2021/08/29 12:11:35 ✅ [v2rayGeoIPDat] geoip-asn.dat --> output/dat
 2021/08/29 12:11:35 ✅ [v2rayGeoIPDat] cn.dat --> output/dat
 2021/08/29 12:11:35 ✅ [v2rayGeoIPDat] private.dat --> output/dat
-2021/08/29 12:11:39 ✅ [maxmindMMDB] Country.mmdb --> output/maxmind
+2021/08/29 12:11:39 ✅ [ipinfoCountryMMDB] Country.mmdb --> output/ipinfo
+2021/08/29 12:11:39 ✅ [maxmindMMDB] Country-maxmind.mmdb --> output/maxmind
 2021/08/29 12:11:39 ✅ [maxmindMMDB] Country-only-cn-private.mmdb --> output/maxmind
 2021/08/29 12:11:39 ✅ [text] netflix.txt --> output/text
 2021/08/29 12:11:39 ✅ [text] telegram.txt --> output/text

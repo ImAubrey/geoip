@@ -339,12 +339,7 @@ func (m *MMDBOut) marshalData(writer *mmdbwriter.Tree, entry *lib.Entry, extraIn
 			}
 
 		case TypeIPInfoCountryMMDBOut:
-			info, found := extraInfo[entry.GetName()].(struct {
-				Continent     string `maxminddb:"continent"`
-				ContinentName string `maxminddb:"continent_name"`
-				Country       string `maxminddb:"country"`
-				CountryName   string `maxminddb:"country_name"`
-			})
+			info, found := extraInfo[entry.GetName()].(ipInfoCountryRecord)
 
 			if !found {
 				log.Printf("⚠️ [type %s | action %s] not found extra info for list %s\n", m.Type, m.Action, entry.GetName())
@@ -354,10 +349,10 @@ func (m *MMDBOut) marshalData(writer *mmdbwriter.Tree, entry *lib.Entry, extraIn
 				}
 			} else {
 				record = mmdbtype.Map{
-					"continent":      mmdbtype.String(info.Continent),
-					"continent_name": mmdbtype.String(info.ContinentName),
+					"continent":      mmdbtype.String(info.continentCode()),
+					"continent_name": mmdbtype.String(info.continentName()),
 					"country":        mmdbtype.String(entry.GetName()),
-					"country_name":   mmdbtype.String(info.CountryName),
+					"country_name":   mmdbtype.String(info.countryName()),
 				}
 			}
 
