@@ -22,6 +22,7 @@
 - **ipinfoCountryMMDB**：IPInfo Lite / country mmdb 数据格式（`ipinfo_lite.mmdb`）
 - **ipinfoASNMMDB**：IPInfo Lite ASN mmdb 数据格式（`ipinfo_lite.mmdb`）
 - **json**：JSON 数据格式
+- **maxmindMMDBFallback**：只在主 MMDB 未覆盖地址段时补充 MaxMind country mmdb 数据
 - **maxmindGeoLite2ASNCSV**：MaxMind GeoLite2 ASN CSV 数据格式（`GeoLite2-ASN-CSV.zip`）
 - **maxmindGeoLite2CountryCSV**：MaxMind GeoLite2 country CSV 数据格式（`GeoLite2-Country-CSV.zip`）
 - **maxmindMMDB**：MaxMind GeoLite2 country mmdb 数据格式（`GeoLite2-Country.mmdb`）
@@ -310,6 +311,27 @@
       "fastly":   ["AS54113", "AS394192"]              // 从 fastly 类别中移除隶属于 ASN 的 IPv6 地址
     },
     "onlyIPType": "ipv6"                               // 只移除 IPv6 地址
+  }
+}
+```
+
+### **maxmindMMDBFallback**
+
+- **type**：（必须）输入格式的名称
+- **action**：（必须）操作类型，值为 `add`（添加 IP 地址）或 `remove`（移除 IP 地址）
+- **args**：（可选）
+  - **primaryURI**：（可选）主 MMDB 文件路径，默认为 `./ipinfo/ipinfo_lite.mmdb`。该文件已覆盖的地址段不会被 fallback 覆盖。
+  - **fallbackURI**：（可选）MaxMind GeoLite2 Country MMDB 文件路径，默认为 `./geolite2/GeoLite2-Country.mmdb`。
+  - **wantedList**：（可选）指定需要补充的国家/地区类别。
+  - **onlyIPType**：（可选）只处理的 IP 地址类型，值为 `ipv4` 或 `ipv6`。
+
+```jsonc
+{
+  "type": "maxmindMMDBFallback",
+  "action": "add",
+  "args": {
+    "primaryURI": "./ipinfo/ipinfo_lite.mmdb",
+    "fallbackURI": "./geolite2/GeoLite2-Country.mmdb"
   }
 }
 ```

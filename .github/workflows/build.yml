@@ -44,6 +44,20 @@ jobs:
           curl -fL "https://ipinfo.io/data/ipinfo_lite.mmdb?token=${IPINFO_TOKEN}" -o ./ipinfo/ipinfo_lite.mmdb
           cp ./ipinfo/ipinfo_lite.mmdb ./output/IPinfo-Lite.mmdb
 
+      - name: Download MaxMind fallback database
+        env:
+          LICENSE_KEY: ${{ secrets.MAXMIND_GEOLITE2_LICENSE }}
+        run: |
+          if [ -z "${LICENSE_KEY}" ]; then
+            echo "MAXMIND_GEOLITE2_LICENSE secret is required"
+            exit 1
+          fi
+
+          mkdir -p geolite2
+          curl -fL "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key=${LICENSE_KEY}&suffix=tar.gz" -o ./GeoLite2-Country.tar.gz
+          tar -xzf ./GeoLite2-Country.tar.gz
+          cp ./GeoLite2-Country_*/*.mmdb ./geolite2/GeoLite2-Country.mmdb
+
       - name: Build geoip files
         run: |
           go build ./

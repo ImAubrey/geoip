@@ -8,6 +8,14 @@
       }
     },
     {
+      "type": "maxmindMMDBFallback",
+      "action": "add",
+      "args": {
+        "primaryURI": "./ipinfo/ipinfo_lite.mmdb",
+        "fallbackURI": "./geolite2/GeoLite2-Country.mmdb"
+      }
+    },
+    {
       "type": "cutter",
       "action": "remove",
       "args": {

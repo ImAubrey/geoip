@@ -6,7 +6,7 @@ This project releases various formats of GeoIP files automatically every Thursda
 
 ## 与 IPinfo 官方 GeoIP 数据的区别
 
-本项目默认使用 [IPinfo Lite MMDB 数据](https://ipinfo.io/developers/ipinfo-lite-database)生成各个国家和地区的 GeoIP 文件，并使用同一数据库中的 ASN 字段生成新增 ASN 类别。所有可供使用的国家和地区 geoip 类别（如 `geoip:cn`，两位英文字母表示国家和地区），请查看：[https://www.iban.com/country-codes](https://www.iban.com/country-codes)。
+本项目默认使用 [IPinfo Lite MMDB 数据](https://ipinfo.io/developers/ipinfo-lite-database)生成各个国家和地区的 GeoIP 文件，并使用同一数据库中的 ASN 字段生成新增 ASN 类别。若 IPinfo 未覆盖某些地址段，则使用 MaxMind GeoLite2 Country 作为 fallback 补充；已被 IPinfo 覆盖的地址段不会被 MaxMind 覆盖。所有可供使用的国家和地区 geoip 类别（如 `geoip:cn`，两位英文字母表示国家和地区），请查看：[https://www.iban.com/country-codes](https://www.iban.com/country-codes)。
 
 另外，本项目对 IPinfo 官方 GeoIP 数据做了修改和新增：
 
@@ -165,7 +165,7 @@ IPinfo Lite 官方 MMDB 数据源：
 
 本项目生成的**国家/地区**类型 mmdb 文件：
 
-> `Country.mmdb` 默认使用 IPinfo 字段格式。需要 MaxMind-compatible 字段格式的客户端，请使用 `Country-maxmind.mmdb`。
+> 除 `Country-maxmind.mmdb` 外，默认产物均以 IPinfo 数据为主，并仅用 MaxMind 补充 IPinfo 未覆盖的地址段。`Country.mmdb` 默认使用 IPinfo 字段格式。需要 MaxMind-compatible 字段格式的客户端，请使用 `Country-maxmind.mmdb`。
 
 - **Country.mmdb**（IPinfo 格式增强版 GeoIP，包含国家/地区类别，以及上述新增类别）：
   - [https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb](https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb)
@@ -428,8 +428,8 @@ RULE-SET,https://cdn.jsdelivr.net/gh/Loyalsoldier/geoip@release/surge/telegram.t
 
 **特别说明：**
 
-- **在线生成**：[Fork](https://github.com/Loyalsoldier/geoip/fork) 本项目后，需要在自己仓库的 **[Settings]** 页面的左侧边栏 **[Secrets and variables]** 下的 **[Actions]** 选项卡页面中添加一个名为 **IPINFO_TOKEN** 的 secret，否则 GitHub Actions 会运行失败。这个 secret 的值为 IPinfo 账号的 access token。
-- **本地生成**：需要提前从 IPinfo 下载 `ipinfo_lite.mmdb`，并放到名为 `ipinfo` 的目录。
+- **在线生成**：[Fork](https://github.com/Loyalsoldier/geoip/fork) 本项目后，需要在自己仓库的 **[Settings]** 页面的左侧边栏 **[Secrets and variables]** 下的 **[Actions]** 选项卡页面中添加名为 **IPINFO_TOKEN** 和 **MAXMIND_GEOLITE2_LICENSE** 的 secrets，否则 GitHub Actions 会运行失败。`IPINFO_TOKEN` 的值为 IPinfo 账号的 access token；`MAXMIND_GEOLITE2_LICENSE` 的值为 MaxMind 账号的 license key。
+- **本地生成**：需要提前从 IPinfo 下载 `ipinfo_lite.mmdb`，并放到名为 `ipinfo` 的目录；同时需要下载 MaxMind `GeoLite2-Country.mmdb`，并放到名为 `geolite2` 的目录，用于补充 IPinfo 未覆盖的地址段。
 
 ### 概念解析
 
@@ -455,6 +455,7 @@ These two concepts are notable: `input` and `output`. The `input` is the data so
 - **dbipCountryMMDB**：DB-IP country mmdb 数据格式（`dbip-country-lite.mmdb`）
 - **ipinfoCountryMMDB**：IPInfo Lite / country mmdb 数据格式（`ipinfo_lite.mmdb`）
 - **ipinfoASNMMDB**：IPInfo Lite ASN mmdb 数据格式（`ipinfo_lite.mmdb`）
+- **maxmindMMDBFallback**：只在主 MMDB 未覆盖地址段时补充 MaxMind country mmdb 数据
 - **mihomoMRS**：mihomo MRS 数据格式（`geoip-cn.mrs`）
 - **singboxSRS**：sing-box SRS 数据格式（`geoip-cn.srs`）
 - **clashRuleSetClassical**：[classical 类型的 Clash RuleSet](https://github.com/Dreamacro/clash/wiki/premium-core-features#classical)
@@ -527,6 +528,7 @@ All available input formats:
   - ipinfoASNMMDB (Convert IPInfo ASN mmdb database to other formats)
   - ipinfoCountryMMDB (Convert IPInfo country mmdb database to other formats)
   - json (Convert JSON data to other formats)
+  - maxmindMMDBFallback (Use MaxMind country mmdb only for ranges missing from the primary mmdb)
   - maxmindGeoLite2ASNCSV (Convert MaxMind GeoLite2 ASN CSV data to other formats)
   - maxmindGeoLite2CountryCSV (Convert MaxMind GeoLite2 country CSV data to other formats)
   - maxmindMMDB (Convert MaxMind mmdb database to other formats)
