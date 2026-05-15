@@ -28,7 +28,7 @@
       "action": "add",
       "args": {
         "name": "common-dns",
-        "uri": "https://raw.githubusercontent.com/ImAubrey/geoip/refs/heads/master/custom/common-dns.txt",
+        "uri": "https://raw.githubusercontent.com/ImAubrey/geoip/refs/heads/master/custom/common-dns.txt"
       }
     },
     {

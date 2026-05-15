@@ -170,6 +170,10 @@ func (m *MMDBFallbackIn) primaryCoverage(content []byte) (*netipx.IPSet, *netipx
 		if err != nil {
 			return nil, nil, err
 		}
+		prefix, err = normalizeIPInfoPrefix(prefix, ipType)
+		if err != nil {
+			return nil, nil, err
+		}
 		switch ipType {
 		case lib.IPv4:
 			if m.OnlyIPType == lib.IPv6 {

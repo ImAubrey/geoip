@@ -159,7 +159,15 @@ func (m *MMDBIn) generateEntries(content []byte, entries map[string]*lib.Entry) 
 			entry = lib.NewEntry(name)
 		}
 
-		if err := entry.AddPrefix(subnet); err != nil {
+		if m.Type == TypeIPInfoCountryMMDBIn {
+			prefix, err := normalizeIPInfoNetwork(subnet)
+			if err != nil {
+				return err
+			}
+			if err := entry.AddPrefix(prefix); err != nil {
+				return err
+			}
+		} else if err := entry.AddPrefix(subnet); err != nil {
 			return err
 		}
 

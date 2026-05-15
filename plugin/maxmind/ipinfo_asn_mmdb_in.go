@@ -204,7 +204,11 @@ func (i *IPInfoASNMMDB) generateEntries(content []byte, entries map[string]*lib.
 			if !got {
 				entry = lib.NewEntry(listName)
 			}
-			if err := entry.AddPrefix(subnet); err != nil {
+			prefix, err := normalizeIPInfoNetwork(subnet)
+			if err != nil {
+				return err
+			}
+			if err := entry.AddPrefix(prefix); err != nil {
 				return err
 			}
 			entries[listName] = entry
