@@ -333,6 +333,7 @@
             "AS393234",
             "AS393560"
           ],
+          "apple": ["AS714", "AS6185"],
           "cloudflare": [
             "AS395747",
             "AS394536",
@@ -416,6 +417,7 @@
         "outputName": "geoip-asn.dat",
         "wantedList": [
           "intl-cdn",
+          "apple",
           "cloudflare",
           "cloudfront",
           "facebook",
@@ -454,6 +456,7 @@
         "overwriteList": [
           "cn",
           "intl-cdn",
+          "apple",
           "cloudflare",
           "cloudfront",
           "facebook",
@@ -476,6 +479,7 @@
         "overwriteList": [
           "cn",
           "intl-cdn",
+          "apple",
           "cloudflare",
           "cloudfront",
           "facebook",
@@ -498,6 +502,7 @@
         "overwriteList": ["cn", "private"],
         "excludedList": [
           "intl-cdn",
+          "apple",
           "cloudflare",
           "cloudfront",
           "facebook",
@@ -527,6 +532,7 @@
         "outputName": "Country-asn.mmdb",
         "wantedList": [
           "intl-cdn",
+          "apple",
           "cloudflare",
           "cloudfront",
           "facebook",
