@@ -21,10 +21,13 @@ This project releases various formats of GeoIP files automatically every Thursda
   - `geoip:google`（`GEOIP,GOOGLE`）
   - `geoip:netflix`（`GEOIP,NETFLIX`）
   - `geoip:telegram`（`GEOIP,TELEGRAM`）
+  - `geoip:tencent`（`GEOIP,TENCENT`）
   - `geoip:twitter`（`GEOIP,TWITTER`）
   - `geoip:tor`（`GEOIP,TOR`）
 
 `geoip:apple` 根据 IPinfo Lite 中的 ASN 数据收录 `AS714` 和 `AS6185` 的 IPv4／IPv6 地址段；ASN 归属参考 [Apple 的 PeeringDB 记录](https://www.peeringdb.com/asn/714)。该分类与 `intl-cdn` 可同时命中，范围不涵盖 Apple 使用的所有第三方 CDN。此 fork 的数据请使用 [ImAubrey/geoip Releases](https://github.com/ImAubrey/geoip/releases/latest) 中的 `geoip.dat`，或 [release 分支的独立 apple 数据](https://github.com/ImAubrey/geoip/blob/release/text/apple.txt)。
+
+`geoip:tencent` 使用同一 IPinfo Lite ASN 数据，收录 [腾讯国内／全球网络与腾讯云](https://www.peeringdb.com/org/8332)（`AS45090`、`AS132203`、`AS132591`）、[腾讯云北京](https://rdap.apnic.net/autnum/133478)（`AS133478`）、[腾讯泰国](https://rdap.apnic.net/autnum/137876)（`AS137876`）和 [EdgeOne／ACE CDN](https://www.peeringdb.com/asn/139341)（`AS139341`）。该分类也会覆盖腾讯云客户的服务器流量，不能直接等同于微信或 QQ；可从上述 fork 的 Releases 获取 `geoip.dat`，或查看 [独立 tencent 数据](https://github.com/ImAubrey/geoip/blob/release/text/tencent.txt)。
 
 ## 下载地址与使用方法
 
