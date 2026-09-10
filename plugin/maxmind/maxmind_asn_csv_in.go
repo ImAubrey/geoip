@@ -17,8 +17,9 @@ import (
 )
 
 const (
-	TypeASNCSV = "maxmindGeoLite2ASNCSV"
-	DescASNCSV = "Convert MaxMind GeoLite2 ASN CSV data to other formats"
+	TypeASNCSV         = "maxmindGeoLite2ASNCSV"
+	DescASNCSV         = "Convert MaxMind GeoLite2 ASN CSV data to other formats"
+	geoIPHTTPUserAgent = "ImAubrey/geoip (+https://github.com/ImAubrey/geoip)"
 )
 
 var (
@@ -38,7 +39,7 @@ func init() {
 func mapRIRToURL(rir string) string {
 	switch strings.ToLower(rir) {
 	case "apnic":
-		return "http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
+		return "https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest"
 	case "ripe":
 		return "http://ftp.ripe.net/ripe/stats/delegated-ripencc-latest"
 	case "arin":
@@ -56,10 +57,19 @@ func fetchASNFromRIR(rir, country string) ([]string, error) {
 	if url == "" {
 		return nil, fmt.Errorf("unsupported RIR: %s", rir)
 	}
+	return fetchASNFromRIRURL(url, rir, country)
+}
 
-	resp, err := http.Get(url)
+func fetchASNFromRIRURL(url, rir, country string) ([]string, error) {
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		return nil, fmt.Errorf("http get failed: %v", err)
+		return nil, fmt.Errorf("create request failed: %w", err)
+	}
+	req.Header.Set("User-Agent", geoIPHTTPUserAgent)
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("http get failed: %w", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != http.StatusOK {
@@ -190,8 +200,10 @@ func newGeoLite2ASNCSV(action lib.Action, data json.RawMessage) (lib.InputConver
 				// fetch remote content
 				fetched, err := fetchASNs(raw)
 				if err != nil {
-					// if fetch fails, skip or log; here we skip silently
-					continue
+					return nil, fmt.Errorf("fetch ASN source %q for list %q: %w", raw, list, err)
+				}
+				if len(fetched) == 0 {
+					return nil, fmt.Errorf("ASN source %q for list %q returned no entries", raw, list)
 				}
 				sources = fetched
 			} else if isRIRCountryPattern(raw) {
@@ -200,8 +212,10 @@ func newGeoLite2ASNCSV(action lib.Action, data json.RawMessage) (lib.InputConver
 				country := parts[1]
 				fetched, err := fetchASNFromRIR(rir, country)
 				if err != nil {
-					// 拉不到就跳过
-					continue
+					return nil, fmt.Errorf("fetch ASN source %q for list %q: %w", raw, list, err)
+				}
+				if len(fetched) == 0 {
+					return nil, fmt.Errorf("ASN source %q for list %q returned no entries", raw, list)
 				}
 				sources = fetched
 

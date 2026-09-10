@@ -62,7 +62,10 @@ func newIPInfoASNMMDB(action lib.Action, data json.RawMessage) (lib.InputConvert
 			case isURL(raw):
 				fetched, err := fetchASNs(raw)
 				if err != nil {
-					continue
+					return nil, fmt.Errorf("fetch ASN source %q for list %q: %w", raw, list, err)
+				}
+				if len(fetched) == 0 {
+					return nil, fmt.Errorf("ASN source %q for list %q returned no entries", raw, list)
 				}
 				sources = fetched
 
@@ -70,7 +73,10 @@ func newIPInfoASNMMDB(action lib.Action, data json.RawMessage) (lib.InputConvert
 				parts := strings.SplitN(raw, ":", 2)
 				fetched, err := fetchASNFromRIR(parts[0], parts[1])
 				if err != nil {
-					continue
+					return nil, fmt.Errorf("fetch ASN source %q for list %q: %w", raw, list, err)
+				}
+				if len(fetched) == 0 {
+					return nil, fmt.Errorf("ASN source %q for list %q returned no entries", raw, list)
 				}
 				sources = fetched
 
