@@ -14,6 +14,7 @@ This project releases various formats of GeoIP files automatically every Thursda
 - 中国大陆 IPv6 地址数据融合了 IPinfo 和 [@gaoyifan/china-operator-ip](https://github.com/gaoyifan/china-operator-ip/blob/ip-lists/china6.txt)
 - 新增类别（方便有特殊需求的用户使用）：
   - `geoip:amazon-ec2`（`GEOIP,AMAZON-EC2`）
+  - `geoip:anycast`（`GEOIP,ANYCAST`）
   - `geoip:apple`（`GEOIP,APPLE`）
   - `geoip:cloudflare`（`GEOIP,CLOUDFLARE`）
   - `geoip:cloudfront`（`GEOIP,CLOUDFRONT`）
@@ -32,6 +33,8 @@ This project releases various formats of GeoIP files automatically every Thursda
 `geoip:tencent` 使用同一 IPinfo Lite ASN 数据，收录 [腾讯国内／全球网络与腾讯云](https://www.peeringdb.com/org/8332)（`AS45090`、`AS132203`、`AS132591`）、[腾讯云北京](https://rdap.apnic.net/autnum/133478)（`AS133478`）、[腾讯泰国](https://rdap.apnic.net/autnum/137876)（`AS137876`）和 [EdgeOne／ACE CDN](https://www.peeringdb.com/asn/139341)（`AS139341`）。该分类也会覆盖腾讯云客户的服务器流量，不能直接等同于微信或 QQ；可从上述 fork 的 Releases 获取 `geoip.dat`，或查看 [独立 tencent 数据](https://github.com/ImAubrey/geoip/blob/release/text/tencent.txt)。
 
 `geoip:amazon-ec2` 根据 [AWS 官方 IP 地址范围](https://ip-ranges.amazonaws.com/ip-ranges.json)动态收录标记为 `EC2` 的 IPv4／IPv6 网段。`geoip:tencent-voov` 收录[腾讯会议会议室连接器企业防火墙配置](https://meeting.tencent.com/support/topic/172)公布的 IP 网段。
+
+`geoip:anycast` 使用 [LACeS Anycast Census](https://github.com/ut-dacs/Anycast-Census) 每日更新的 IPv4／IPv6 测量数据，采用项目作者推荐的高置信度条件（任一 Anycast-based 探测位置数大于 3，或任一 latency-based 探测位置数大于 1），并排除标记为部分 Anycast 的 IPv4 网段。收录的地址会从所有两位 ISO 国家／地区代码类别中移除，但仍可同时属于 `cloudflare`、`google` 等服务类别。
 
 ## 下载地址与使用方法
 

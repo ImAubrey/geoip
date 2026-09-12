@@ -416,6 +416,21 @@
     {
       "type": "private",
       "action": "add"
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "anycast",
+        "uri": "./custom/anycast.txt"
+      }
+    },
+    {
+      "type": "countryCodeSubtract",
+      "action": "remove",
+      "args": {
+        "sourceList": ["anycast"]
+      }
     }
   ],
   "output": [
@@ -443,6 +458,7 @@
         "outputDir": "./output",
         "outputName": "geoip-asn.dat",
         "wantedList": [
+          "anycast",
           "intl-cdn",
           "amazon-ec2",
           "apple",
@@ -486,6 +502,7 @@
         "sourceMMDBURI": "./ipinfo/ipinfo_lite.mmdb",
         "overwriteList": [
           "cn",
+          "anycast",
           "intl-cdn",
           "amazon-ec2",
           "apple",
@@ -513,6 +530,7 @@
         "outputName": "Country-maxmind.mmdb",
         "overwriteList": [
           "cn",
+          "anycast",
           "intl-cdn",
           "amazon-ec2",
           "apple",
@@ -540,6 +558,7 @@
         "outputName": "Country-without-asn.mmdb",
         "overwriteList": ["cn", "private"],
         "excludedList": [
+          "anycast",
           "intl-cdn",
           "amazon-ec2",
           "apple",
@@ -574,6 +593,7 @@
         "outputDir": "./output",
         "outputName": "Country-asn.mmdb",
         "wantedList": [
+          "anycast",
           "intl-cdn",
           "amazon-ec2",
           "apple",

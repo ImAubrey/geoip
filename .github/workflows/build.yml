@@ -58,6 +58,11 @@ jobs:
           tar -xzf ./GeoLite2-Country.tar.gz
           cp ./GeoLite2-Country_*/*.mmdb ./geolite2/GeoLite2-Country.mmdb
 
+      - name: Build high-confidence Anycast list
+        run: |
+          python -m pip install --disable-pip-version-check pyarrow==25.0.1
+          python ./scripts/build_anycast.py --output ./custom/anycast.txt
+
       - name: Build geoip files
         run: |
           go build ./

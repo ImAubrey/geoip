@@ -304,6 +304,39 @@ func (e *Entry) RemovePrefix(cidr string) error {
 	return nil
 }
 
+// RemovePrefixSet removes all prefixes in source from this entry.
+func (e *Entry) RemovePrefixSet(source *Entry, opts ...IgnoreIPOption) error {
+	var ignoreIPType IPType
+	for _, opt := range opts {
+		if opt != nil {
+			ignoreIPType = opt()
+		}
+	}
+
+	if source.hasIPv4Builder() && ignoreIPType != IPv4 {
+		ipv4Set, err := source.ipv4Builder.IPSet()
+		if err != nil {
+			return err
+		}
+		if e.hasIPv4Builder() {
+			e.ipv4Builder.RemoveSet(ipv4Set)
+			e.ipv4Set = nil
+		}
+	}
+	if source.hasIPv6Builder() && ignoreIPType != IPv6 {
+		ipv6Set, err := source.ipv6Builder.IPSet()
+		if err != nil {
+			return err
+		}
+		if e.hasIPv6Builder() {
+			e.ipv6Builder.RemoveSet(ipv6Set)
+			e.ipv6Set = nil
+		}
+	}
+
+	return nil
+}
+
 func (e *Entry) buildIPSet() error {
 	if e.hasIPv4Builder() && !e.hasIPv4Set() {
 		ipv4set, err := e.ipv4Builder.IPSet()
