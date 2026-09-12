@@ -136,6 +136,14 @@
       }
     },
     {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "tencent-voov",
+        "uri": "./custom/tencent-voov.txt"
+      }
+    },
+    {
       "type": "json",
       "action": "add",
       "args": {
@@ -180,6 +188,18 @@
         "jsonPath": [
           "prefixes.#(service==\"CLOUDFRONT\")#.ip_prefix",
           "ipv6_prefixes.#(service==\"CLOUDFRONT\")#.ipv6_prefix"
+        ]
+      }
+    },
+    {
+      "type": "json",
+      "action": "add",
+      "args": {
+        "name": "amazon-ec2",
+        "uri": "https://ip-ranges.amazonaws.com/ip-ranges.json",
+        "jsonPath": [
+          "prefixes.#(service==\"EC2\")#.ip_prefix",
+          "ipv6_prefixes.#(service==\"EC2\")#.ipv6_prefix"
         ]
       }
     },
@@ -424,6 +444,7 @@
         "outputName": "geoip-asn.dat",
         "wantedList": [
           "intl-cdn",
+          "amazon-ec2",
           "apple",
           "cloudflare",
           "cloudfront",
@@ -434,6 +455,7 @@
           "netflix",
           "telegram",
           "tencent",
+          "tencent-voov",
           "twitter",
           "tor"
         ]
@@ -465,6 +487,7 @@
         "overwriteList": [
           "cn",
           "intl-cdn",
+          "amazon-ec2",
           "apple",
           "cloudflare",
           "cloudfront",
@@ -475,6 +498,7 @@
           "netflix",
           "telegram",
           "tencent",
+          "tencent-voov",
           "twitter",
           "tor",
           "private"
@@ -490,6 +514,7 @@
         "overwriteList": [
           "cn",
           "intl-cdn",
+          "amazon-ec2",
           "apple",
           "cloudflare",
           "cloudfront",
@@ -500,6 +525,7 @@
           "netflix",
           "telegram",
           "tencent",
+          "tencent-voov",
           "twitter",
           "tor",
           "private"
@@ -515,6 +541,7 @@
         "overwriteList": ["cn", "private"],
         "excludedList": [
           "intl-cdn",
+          "amazon-ec2",
           "apple",
           "cloudflare",
           "cloudfront",
@@ -525,6 +552,7 @@
           "netflix",
           "telegram",
           "tencent",
+          "tencent-voov",
           "twitter",
           "tor"
         ]
@@ -547,6 +575,7 @@
         "outputName": "Country-asn.mmdb",
         "wantedList": [
           "intl-cdn",
+          "amazon-ec2",
           "apple",
           "cloudflare",
           "cloudfront",
@@ -557,6 +586,7 @@
           "netflix",
           "telegram",
           "tencent",
+          "tencent-voov",
           "twitter",
           "tor"
         ]
