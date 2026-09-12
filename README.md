@@ -17,6 +17,9 @@ This project releases various formats of GeoIP files automatically every Thursda
   - `geoip:anycast`（`GEOIP,ANYCAST`）
   - `geoip:apple`（`GEOIP,APPLE`）
   - `geoip:cloudflare`（`GEOIP,CLOUDFLARE`）
+  - `geoip:cloudflare-warp`（`GEOIP,CLOUDFLARE-WARP`）
+  - `geoip:cloudflare-warp-egress`（`GEOIP,CLOUDFLARE-WARP-EGRESS`）
+  - `geoip:cloudflare-warp-ingress`（`GEOIP,CLOUDFLARE-WARP-INGRESS`）
   - `geoip:cloudfront`（`GEOIP,CLOUDFRONT`）
   - `geoip:facebook`（`GEOIP,FACEBOOK`）
   - `geoip:fastly`（`GEOIP,FASTLY`）
@@ -35,6 +38,8 @@ This project releases various formats of GeoIP files automatically every Thursda
 `geoip:amazon-ec2` 根据 [AWS 官方 IP 地址范围](https://ip-ranges.amazonaws.com/ip-ranges.json)动态收录标记为 `EC2` 的 IPv4／IPv6 网段。`geoip:tencent-voov` 收录[腾讯会议会议室连接器企业防火墙配置](https://meeting.tencent.com/support/topic/172)公布的 IP 网段。
 
 `geoip:anycast` 使用 [LACeS Anycast Census](https://github.com/ut-dacs/Anycast-Census) 每日更新的 IPv4／IPv6 测量数据，采用项目作者推荐的高置信度条件（任一 Anycast-based 探测位置数大于 3，或任一 latency-based 探测位置数大于 1），并排除标记为部分 Anycast 的 IPv4 网段。收录的地址会从所有两位 ISO 国家／地区代码类别中移除，但仍可同时属于 `cloudflare`、`google` 等服务类别。
+
+`geoip:cloudflare-warp-ingress` 收录 [Cloudflare 官方防火墙文档](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/cloudflare-one-client/deployment/firewall/#warp-ingress-ip)公布的 Consumer WARP、WireGuard、MASQUE 和 FedRAMP High 接入端点。`geoip:cloudflare-warp-egress` 根据 Cloudflare 官方 [`local-ip-ranges.csv`](https://api.cloudflare.com/local-ip-ranges.csv) 动态生成，覆盖其 forward-proxy 产品使用的出口地址；该数据包含 WARP／1.1.1.1 出口，但官方没有保证其中只有 WARP。`geoip:cloudflare-warp` 是接入与出口分类的并集。DAT、SRS、MRS 和文本产物保留 `cloudflare-warp-ingress`／`cloudflare-warp-egress` ⊂ `cloudflare-warp` ⊂ `cloudflare` 的重叠关系；MMDB 格式只能为单个地址保存一个类别，因此其中使用总类 `CLOUDFLARE-WARP`。
 
 ## 下载地址与使用方法
 

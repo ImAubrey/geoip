@@ -1,0 +1,14 @@
+# Consumer WARP
+162.159.192.0/24
+
+# Cloudflare One Client WireGuard
+162.159.193.0/24
+2606:4700:100::/48
+
+# Cloudflare One Client MASQUE
+162.159.197.0/24
+2606:4700:102::/48
+
+# Cloudflare One Client FedRAMP High MASQUE
+162.159.239.0/24
+2606:4700:105::/48

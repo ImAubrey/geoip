@@ -63,6 +63,9 @@ jobs:
           python -m pip install --disable-pip-version-check pyarrow==25.0.1
           python ./scripts/build_anycast.py --output ./custom/anycast.txt
 
+      - name: Build Cloudflare WARP egress list
+        run: python ./scripts/build_cloudflare_warp.py --output ./custom/cloudflare-warp-egress.txt
+
       - name: Build geoip files
         run: |
           go build ./

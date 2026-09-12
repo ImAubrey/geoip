@@ -131,6 +131,54 @@
       "type": "text",
       "action": "add",
       "args": {
+        "name": "cloudflare-warp-ingress",
+        "uri": "./custom/cloudflare-warp-ingress.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cloudflare-warp",
+        "uri": "./custom/cloudflare-warp-ingress.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cloudflare",
+        "uri": "./custom/cloudflare-warp-ingress.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cloudflare-warp-egress",
+        "uri": "./custom/cloudflare-warp-egress.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cloudflare-warp",
+        "uri": "./custom/cloudflare-warp-egress.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cloudflare",
+        "uri": "./custom/cloudflare-warp-egress.txt"
+      }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
         "name": "telegram",
         "uri": "https://core.telegram.org/resources/cidr.txt"
       }
@@ -463,6 +511,9 @@
           "amazon-ec2",
           "apple",
           "cloudflare",
+          "cloudflare-warp",
+          "cloudflare-warp-egress",
+          "cloudflare-warp-ingress",
           "cloudfront",
           "facebook",
           "fastly",
@@ -507,6 +558,7 @@
           "amazon-ec2",
           "apple",
           "cloudflare",
+          "cloudflare-warp",
           "cloudfront",
           "facebook",
           "fastly",
@@ -535,6 +587,7 @@
           "amazon-ec2",
           "apple",
           "cloudflare",
+          "cloudflare-warp",
           "cloudfront",
           "facebook",
           "fastly",
@@ -563,6 +616,9 @@
           "amazon-ec2",
           "apple",
           "cloudflare",
+          "cloudflare-warp",
+          "cloudflare-warp-egress",
+          "cloudflare-warp-ingress",
           "cloudfront",
           "facebook",
           "fastly",
@@ -598,6 +654,7 @@
           "amazon-ec2",
           "apple",
           "cloudflare",
+          "cloudflare-warp",
           "cloudfront",
           "facebook",
           "fastly",
