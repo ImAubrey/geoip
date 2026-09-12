@@ -184,6 +184,18 @@
       }
     },
     {
+      "type": "json",
+      "action": "add",
+      "args": {
+        "name": "intl-cdn",
+        "uri": "https://ip-ranges.amazonaws.com/ip-ranges.json",
+        "jsonPath": [
+          "prefixes.#(service!=\"EC2\")#.ip_prefix",
+          "ipv6_prefixes.#(service!=\"EC2\")#.ipv6_prefix"
+        ]
+      }
+    },
+    {
       "type": "ipinfoASNMMDB",
       "action": "add",
       "args": {
@@ -367,6 +379,18 @@
           ],
           "twitter": ["AS8945", "AS63179", "AS54888", "AS35995", "AS13414"]
         }
+      }
+    },
+    {
+      "type": "json",
+      "action": "remove",
+      "args": {
+        "name": "intl-cdn",
+        "uri": "https://ip-ranges.amazonaws.com/ip-ranges.json",
+        "jsonPath": [
+          "prefixes.#(service==\"EC2\")#.ip_prefix",
+          "ipv6_prefixes.#(service==\"EC2\")#.ipv6_prefix"
+        ]
       }
     },
     {
